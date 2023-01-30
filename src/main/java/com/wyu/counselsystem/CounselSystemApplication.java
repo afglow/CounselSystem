@@ -1,0 +1,16 @@
+package com.wyu.counselsystem;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+@MapperScan("com.wyu.counselsystem.mapper")
+public class CounselSystemApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(CounselSystemApplication.class, args);
+    }
+
+}

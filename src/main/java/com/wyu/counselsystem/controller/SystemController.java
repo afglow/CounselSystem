@@ -28,11 +28,12 @@ import java.util.*;
 public class SystemController {
     @GetMapping("/getCode")
     public void getCode(HttpServletRequest req, HttpServletResponse resp){
-        String verifyCode = Arrays.toString(CreateVerifiCodeImage.getVerifiCode());
         BufferedImage codeImage = CreateVerifiCodeImage.getVerifiCodeImage();
+        String verifyCode = Arrays.toString(CreateVerifiCodeImage.getVerifiCode());
         //放到请求域
         HttpSession session = req.getSession();
         session.setAttribute("VerifyCode",verifyCode);
+        System.out.println(session.getAttribute("VerifyCode"));
         //传送验证码图片
         try {
             ImageIO.write(codeImage,"JPEG",resp.getOutputStream());
@@ -42,11 +43,11 @@ public class SystemController {
 
     }
 
-    @PostMapping("/test")
-    public Result test(){
-        System.out.println("dsdsdsds");
-        return Result.build("dd",ResultCodeEnum.SUCCESS);
-    }
+//    @PostMapping("/test")
+//    public Result test(){
+//        System.out.println("dsdsdsds");
+//        return Result.build("dd",ResultCodeEnum.SUCCESS);
+//    }
 
     //登录的
     @PostMapping("/login")
@@ -59,6 +60,13 @@ public class SystemController {
 //        }
 //        System.out.println(loginForm.getPassword());
         return Result.ok();
+    }
+
+    @RequestMapping("/logintest")
+    public Result loginTest(HttpServletRequest request){
+        String verifyCode = (String) request.getSession().getAttribute("VerifyCode");
+        System.out.println(request.getSession().getAttribute("VerifyCode"));
+        return Result.ok(verifyCode);
     }
 
     @RequestMapping("/forbidden")

@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
@@ -59,18 +60,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginProcessingUrl("/login")//登录访问的路径 具体的controller不用手写
                 .defaultSuccessUrl("/success").permitAll()//登录成功的默认跳转路径
                 .and().authorizeRequests()
-                .antMatchers("/","/test/hello","/login","/test","/getCode").permitAll()//设置什么路径不需要认证
-//                //hasAuthority 只对应一个权限
-//        .antMatchers("/test/index").hasAuthority("admins")//有这个权限才可以访问
-//                //hasAnyAuthority 多个权限
-//                .antMatchers("/test/index").hasAnyAuthority("admins,manager")//有其中的权限就可以访问
-                //hasRole hasAnyRole同理是多个权限 但是也是封装了前缀ROLE_
+                .antMatchers("/","/login**","/test","/getCode").permitAll()//设置什么路径不需要认证
                 .antMatchers("/test/index").hasRole("user")//底层会变成ROLE_sale
                 .anyRequest().authenticated()
-                .and().rememberMe().tokenRepository(persistentTokenRepository())
-                .tokenValiditySeconds(60)//设置有效时长
-                .userDetailsService(userDetailService)
                 .and()
+                .userDetailsService(userDetailService)
                 .csrf().disable();
 
         //退出登录配置

@@ -23,6 +23,7 @@ public class MyAuthenticationProvide extends DaoAuthenticationProvider {
 
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         String code = request.getParameter("code");
+        System.out.println(request.getSession());
         String verifyCode = (String)request.getSession().getAttribute("VerifyCode");
         System.out.println(verifyCode);
         if (code == null || verifyCode == null || !code.equals(verifyCode)) {

@@ -15,8 +15,8 @@ public class CrossConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedMethods("GET","POST","DELETE","PUT","OPTIONS","HEAD")
+                .allowedOrigins("http://localhost")
+                .allowedMethods("*")
                 .allowCredentials(true)
                 .maxAge(3600)
                 .allowedHeaders("*");

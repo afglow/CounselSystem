@@ -33,6 +33,7 @@ public class SystemController {
         //放到请求域
         HttpSession session = req.getSession();
         session.setAttribute("VerifyCode",verifyCode);
+        System.out.println(session);
         System.out.println(session.getAttribute("VerifyCode"));
         //传送验证码图片
         try {

@@ -37,11 +37,10 @@ public class MyUsernamePasswordFilter extends UsernamePasswordAuthenticationFilt
                 || request.getContentType().equals(MediaType.APPLICATION_JSON_VALUE)) {
 
             //use jackson to deserialize json
-            ObjectMapper mapper = new ObjectMapper();
             UsernamePasswordAuthenticationToken authRequest = null;
-            LoginForm userDetail = null;
             try (InputStream is = request.getInputStream()) {
-
+                ObjectMapper mapper = new ObjectMapper();
+                LoginForm userDetail = null;
                 userDetail = mapper.readValue(is, LoginForm.class);
 
                 System.out.println(userDetail.toString());

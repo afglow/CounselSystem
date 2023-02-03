@@ -5,6 +5,7 @@ import com.wyu.counselsystem.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -37,6 +38,8 @@ public class MyUserDetailService implements UserDetailsService {
 //        }
 
 //        List<GrantedAuthority> auths = AuthorityUtils.commaSeparatedStringToAuthorityList(users.getRole());//配置类的权限名字是用这个来判断的
-        return new User("1203",new BCryptPasswordEncoder().encode("456"),new ArrayList<>());
+        List<GrantedAuthority> auth = new ArrayList<>();
+        auth.add(new SimpleGrantedAuthority("ROLE_user"));
+        return new User("123456",new BCryptPasswordEncoder().encode("123456"),auth);
     }
 }

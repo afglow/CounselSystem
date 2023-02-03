@@ -29,7 +29,7 @@ public class SystemController {
     @GetMapping("/getCode")
     public void getCode(HttpServletRequest req, HttpServletResponse resp){
         BufferedImage codeImage = CreateVerifiCodeImage.getVerifiCodeImage();
-        String verifyCode = Arrays.toString(CreateVerifiCodeImage.getVerifiCode());
+        String verifyCode =new String(CreateVerifiCodeImage.getVerifiCode());
         //放到请求域
         HttpSession session = req.getSession();
         session.setAttribute("VerifyCode",verifyCode);

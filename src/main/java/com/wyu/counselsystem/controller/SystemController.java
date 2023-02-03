@@ -44,36 +44,18 @@ public class SystemController {
 
     }
 
-//    @PostMapping("/test")
-//    public Result test(){
-//        System.out.println("dsdsdsds");
-//        return Result.build("dd",ResultCodeEnum.SUCCESS);
-//    }
-
-    //登录的
-    @PostMapping("/login")
-    public Result login(@RequestBody LoginForm loginForm,HttpServletRequest request){
-        System.out.println("dasdsda");
-        String verifyCode = (String) request.getSession().getAttribute("VerifyCode");
-        System.out.println(loginForm.getUsername());
-//        if (!verifyCode.equals(loginForm.getCode())){
-//            return Result.build("验证码错误",ResultCodeEnum.CODE_ERROR);
-//        }
-//        System.out.println(loginForm.getPassword());
-        return Result.ok();
-    }
-
-    @RequestMapping("/logintest")
+    @RequestMapping("/user/test")
     public Result loginTest(HttpServletRequest request){
         String verifyCode = (String) request.getSession().getAttribute("VerifyCode");
-        System.out.println(request.getSession().getAttribute("VerifyCode"));
         return Result.ok(verifyCode);
     }
 
-    @RequestMapping("/forbidden")
-    public Result forbidden(){
-        return Result.build("访问禁止，无权限！",ResultCodeEnum.NO_PERMIT);
+    @RequestMapping("/use/test")
+    public Result loginTes(HttpServletRequest request){
+        String verifyCode = (String) request.getSession().getAttribute("VerifyCode");
+        return Result.ok(verifyCode);
     }
+
 //
 //    @PostMapping("/login")
 //    public Result login(@RequestBody LoginForm loginForm, HttpServletRequest request){

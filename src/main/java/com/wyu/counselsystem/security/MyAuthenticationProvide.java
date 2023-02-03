@@ -10,6 +10,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Locale;
 
 /**
  * @author afglow
@@ -20,15 +21,15 @@ import javax.servlet.http.HttpServletRequest;
 public class MyAuthenticationProvide extends DaoAuthenticationProvider {
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {
-
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String code = request.getParameter("code");
-        System.out.println(request.getSession());
-        String verifyCode = (String)request.getSession().getAttribute("VerifyCode");
-        System.out.println(verifyCode);
-        if (code == null || verifyCode == null || !code.equals(verifyCode)) {
-            throw new AuthenticationServiceException("验证码错误");
-        }
+//
+//        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+//        String code = request.getParameter("code");
+//        System.out.println(request.getSession());
+//        String verifyCode = (String)request.getSession().getAttribute("VerifyCode");
+//        System.out.println(verifyCode);
+//        if (code == null || verifyCode == null || !code.toUpperCase(Locale.ROOT).equals(verifyCode.toUpperCase(Locale.ROOT))) {
+//            throw new AuthenticationServiceException("验证码错误");
+//        }
 
         super.additionalAuthenticationChecks(userDetails, authentication);
     }

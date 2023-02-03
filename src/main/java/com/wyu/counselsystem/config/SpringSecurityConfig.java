@@ -88,30 +88,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         //登录配置
         http.cors().
-                and().formLogin()//自定义自己编写的登录页面
-//                .loginPage("/login")
-//                .loginProcessingUrl("/login/post")
-//                .successHandler(new AuthenticationSuccessHandler() {
-//                    @Override
-//                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-//                        response.setContentType("text/html;charset=utf-8");
-//                        response.getWriter().write("login success");
-//                    }
-//
-//                })
-//                .failureHandler(new AuthenticationFailureHandler() {
-//                    @Override
-//                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-//                        response.setContentType("text/html;charset=utf-8");
-//                        response.getWriter().write("login fail");
-//                    }
-//                })
+                and().formLogin().loginPage("http://localhost:8080/login")//自定义自己编写的登录页面
                 .and().authorizeRequests()
                 .antMatchers("/getCode","/login**","/").permitAll()//设置什么路径不需要认证
-                .antMatchers("/test/index").hasRole("user")//底层会变成ROLE_sale
+                .antMatchers("/user/**").hasRole("user0")//底层会变成ROLE_user
                 .anyRequest().authenticated()
-
-
                 .and()
                 .csrf().disable();
 

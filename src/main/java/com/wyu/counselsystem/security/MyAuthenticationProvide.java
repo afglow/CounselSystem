@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
  * @Date Create in 2023-02-2023/2/2-17:18
  * @Description
  */
+//sss
 public class MyAuthenticationProvide extends DaoAuthenticationProvider {
     @Override
     protected void additionalAuthenticationChecks(UserDetails userDetails, UsernamePasswordAuthenticationToken authentication) throws AuthenticationException {

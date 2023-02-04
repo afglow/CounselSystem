@@ -48,10 +48,11 @@ public class MyUsernamePasswordFilter extends UsernamePasswordAuthenticationFilt
                 LoginForm userDetail = null;
                 userDetail = mapper.readValue(is, LoginForm.class);
                 verifyCode = (String)request.getSession().getAttribute("VerifyCode");
+
                 //验证验证码
                 if (userDetail.getCode().equals("") || verifyCode == null ||
                         !userDetail.getCode().toUpperCase(Locale.ROOT).equals(verifyCode.toUpperCase(Locale.ROOT))) {
-                    throw new AuthenticationServiceException("验证码错误");
+                    throw new CodeCheckException("验证码错误");
                 }
                 System.out.println(userDetail);
                 authRequest = new UsernamePasswordAuthenticationToken(

@@ -31,15 +31,14 @@ public class MyUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-//        System.out.println(username);
-//        Users users = usersService.selectUser(username);
-//        if (users == null){//认证失败
-//            throw new UsernameNotFoundException("找不到这个用户！");
-//        }
+        Users users = usersService.selectUser(username);
+        if (users == null){//认证失败
+            throw new UsernameNotFoundException("用户名错误！");
+        }
 
-//        List<GrantedAuthority> auths = AuthorityUtils.commaSeparatedStringToAuthorityList(users.getRole());//配置类的权限名字是用这个来判断的
-        List<GrantedAuthority> auth = new ArrayList<>();
-        auth.add(new SimpleGrantedAuthority("ROLE_user"));
-        return new User("123456",new BCryptPasswordEncoder().encode("123456"),auth);
+        List<GrantedAuthority> auths = AuthorityUtils.commaSeparatedStringToAuthorityList(users.getRole());//配置类的权限名字是用这个来判断的
+//        List<GrantedAuthority> auth = new ArrayList<>();
+//        auth.add(new SimpleGrantedAuthority("ROLE_user"));
+        return new User(users.getUsername(),new BCryptPasswordEncoder().encode(users.getPassword()),auths);
     }
 }

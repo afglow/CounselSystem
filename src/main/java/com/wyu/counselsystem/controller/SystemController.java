@@ -50,10 +50,9 @@ public class SystemController {
         return Result.ok(verifyCode);
     }
 
-    @RequestMapping("/use/test")
-    public Result loginTes(HttpServletRequest request){
-        String verifyCode = (String) request.getSession().getAttribute("VerifyCode");
-        return Result.ok(verifyCode);
+    @PostMapping("/register")
+    public void register(){
+
     }
 
 //

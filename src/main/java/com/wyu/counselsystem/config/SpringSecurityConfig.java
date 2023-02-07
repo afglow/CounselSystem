@@ -1,8 +1,6 @@
 package com.wyu.counselsystem.config;
 
-import com.wyu.counselsystem.security.FailureHandler;
-import com.wyu.counselsystem.security.MyUsernamePasswordFilter;
-import com.wyu.counselsystem.security.SuccessHandler;
+import com.wyu.counselsystem.security.*;
 import com.wyu.counselsystem.service.impl.MyUserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +11,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
+import java.util.UUID;
 
 /**
  * @author afglow
@@ -37,7 +42,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 //        jdbcTokenRepository.setDataSource(dataSource);
 //        return jdbcTokenRepository;
 //    }
-//
+
 
 
     @Override
@@ -51,9 +56,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailService).passwordEncoder(password());
     }
+
     //设置密码加密方式
     @Bean
-    PasswordEncoder password(){
+    PasswordEncoder password() {
         return new BCryptPasswordEncoder();
     }
 
@@ -61,14 +67,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
-        http.addFilterAt(customAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class);
+        //自己重写的密码验证过滤器替换默认的
+        http.addFilterAt(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 
         //登录配置
         http.cors().
                 and().formLogin().loginPage("http://localhost:8080/login")//自定义自己编写的登录页面
                 .and().authorizeRequests()
-                .antMatchers("/getCode","/login**","/").permitAll()//设置什么路径不需要认证
+                .antMatchers("/getCode", "/login**", "/register").permitAll()//设置什么路径不需要认证
                 .antMatchers("/user/**").hasRole("user")//底层会变成ROLE_user
                 .antMatchers("admin/**").hasRole("admin")
                 .anyRequest().authenticated()
@@ -77,8 +84,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
         //退出登录配置
         http.logout().logoutUrl("/logout")
-                .logoutSuccessUrl("/test/hello").permitAll();
-
+                .logoutSuccessUrl("http://localhost:8080/login").permitAll();
+        //401(未登录) 403(无权限)
+        http.exceptionHandling().accessDeniedHandler(new DeniedHandler())
+                .authenticationEntryPoint(new EntryPointHandler());
     }
 
     //注册自定义的UsernamePasswordAuthenticationFilter
@@ -86,11 +95,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     MyUsernamePasswordFilter customAuthenticationFilter() throws Exception {
         MyUsernamePasswordFilter filter = new MyUsernamePasswordFilter();
         filter.setFilterProcessesUrl("/login/post");
- filter.setAuthenticationSuccessHandler(new SuccessHandler());
-                filter.setAuthenticationFailureHandler(new FailureHandler());
+        filter.setAuthenticationSuccessHandler(new SuccessHandler());
+        filter.setAuthenticationFailureHandler(new FailureHandler());
         //这句很关键，重用WebSecurityConfigurerAdapter配置的AuthenticationManager，不然要自己组装AuthenticationManager
         filter.setAuthenticationManager(authenticationManagerBean());
         return filter;
     }
+
 
 }

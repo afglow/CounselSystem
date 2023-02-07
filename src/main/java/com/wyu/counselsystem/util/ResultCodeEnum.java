@@ -22,8 +22,8 @@ public enum ResultCodeEnum {
     ARGUMENT_VALID_ERROR(206, "参数校验错误"),
 
     LOGIN_ERROR(207, "用户名或密码错误"),
-    LOGIN_AUTH(208, "未登陆"),
-    PERMISSION(209, "没有权限"),
+    LOGIN_AUTH(401, "未登陆"),
+    PERMISSION(403, "没有权限"),
     SECKILL_NO_START(210, "秒杀还没开始"),
     SECKILL_RUN(211, "正在排队中"),
     SECKILL_NO_PAY_ORDER(212, "您有未支付的订单"),

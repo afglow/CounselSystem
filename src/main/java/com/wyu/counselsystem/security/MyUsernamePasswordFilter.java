@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -46,15 +47,22 @@ public class MyUsernamePasswordFilter extends UsernamePasswordAuthenticationFilt
             try (InputStream is = request.getInputStream()) {
                 ObjectMapper mapper = new ObjectMapper();
                 LoginForm userDetail = null;
+                //JSon取值
                 userDetail = mapper.readValue(is, LoginForm.class);
-                verifyCode = (String)request.getSession().getAttribute("VerifyCode");
 
+                //验证码操作
+                verifyCode = (String)request.getSession().getAttribute("VerifyCode");
                 //验证验证码
                 if (userDetail.getCode().equals("") || verifyCode == null ||
                         !userDetail.getCode().toUpperCase(Locale.ROOT).equals(verifyCode.toUpperCase(Locale.ROOT))) {
                     throw new CodeCheckException("验证码错误");
                 }
                 System.out.println(userDetail);
+
+//                if(!ObjectUtils.isEmpty(userDetail.getRememberMe())){
+//                    request.setAttribute("rememberMe",userDetail.getRememberMe());
+//                }
+
                 authRequest = new UsernamePasswordAuthenticationToken(
                         userDetail.getUsername(), userDetail.getPassword());
 

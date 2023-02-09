@@ -21,7 +21,6 @@ public class EntryPointHandler implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(401);
         response.getWriter().write(JSON.toJSONString(Result.build("", ResultCodeEnum.LOGIN_AUTH)));
     }
 }

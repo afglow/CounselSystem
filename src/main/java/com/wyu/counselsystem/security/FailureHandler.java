@@ -27,6 +27,8 @@ public class FailureHandler implements AuthenticationFailureHandler {
             response.getWriter().write(JSON.toJSONString(Result.build("", ResultCodeEnum.LOGIN_ERROR)));
         }else if (exception instanceof CodeCheckException){
             response.getWriter().write(JSON.toJSONString(Result.build("", ResultCodeEnum.CODE_ERROR)));
+        }else if(exception instanceof TokenTimeOutException){
+            response.getWriter().write(JSON.toJSONString(Result.build("", ResultCodeEnum.TOKEN_ERROR)));
         }else {
             response.getWriter().write(JSON.toJSONString(Result.build("", ResultCodeEnum.ARGUMENT_VALID_ERROR)));
         }

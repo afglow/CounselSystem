@@ -70,6 +70,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         //自己重写的密码验证过滤器替换默认的
         http.addFilterAt(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
+//        //token过滤器
+//        http.addFilterBefore(new JwtVerifyFilter(),UsernamePasswordAuthenticationFilter.class);
 
         //登录配置
         http.cors().

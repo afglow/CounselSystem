@@ -2,9 +2,12 @@ package com.wyu.counselsystem.controller;
 
 import com.baomidou.mybatisplus.extension.api.R;
 import com.wyu.counselsystem.pojo.LoginForm;
+import com.wyu.counselsystem.pojo.Users;
+import com.wyu.counselsystem.service.UsersService;
 import com.wyu.counselsystem.util.CreateVerifiCodeImage;
 import com.wyu.counselsystem.util.Result;
 import com.wyu.counselsystem.util.ResultCodeEnum;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +29,10 @@ import java.util.*;
 //@RequestMapping("/sys")
 @RestController
 public class SystemController {
+
+    @Autowired
+    private UsersService usersService;
+
     @GetMapping("/getCode")
     public void getCode(HttpServletRequest req, HttpServletResponse resp){
         BufferedImage codeImage = CreateVerifiCodeImage.getVerifiCodeImage();
@@ -33,7 +40,6 @@ public class SystemController {
         //放到请求域
         HttpSession session = req.getSession();
         session.setAttribute("VerifyCode",verifyCode);
-        System.out.println(session);
         System.out.println(session.getAttribute("VerifyCode"));
         //传送验证码图片
         try {
@@ -50,9 +56,21 @@ public class SystemController {
         return Result.ok(verifyCode);
     }
 
+    //应聘者系统登录
     @PostMapping("/register")
-    public void register(){
-
+    public Result register(String username,String password){
+        if (username != null && password !=null){
+            Users users1 = usersService.selectUser(username);
+            if (users1 != null){
+                return Result.build("",ResultCodeEnum.HAD_REGISTER);
+            }
+        }
+        Users users = new Users();
+        users.setUsername(username);
+        users.setPassword(password);
+        users.setRole("ROLE_user");
+        usersService.save(users);
+        return Result.ok();
     }
 
 //
